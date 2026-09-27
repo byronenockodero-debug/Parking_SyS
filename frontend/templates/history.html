@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}History{% endblock %}
+
+{% block content %}
+<h2>Parking History</h2>
+
+<table class="history-table">
+    <thead>
+        <tr>
+            <th>Ticket</th>
+            <th>Plate</th>
+            <th>Slot</th>
+            <th>Entry</th>
+            <th>Exit</th>
+            <th>Paid (KES)</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for t in tickets %}
+        <tr>
+            <td>{{ t["ticket_id"] }}</td>
+            <td>{{ t["vehicle_plate"] }}</td>
+            <td>{{ t["slot_id"] }}</td>
+            <td>{{ t["entry_time"] }}</td>
+            <td>{{ t["exit_time"] or "-" }}</td>
+            <td>{{ "%.2f"|format(t["amount_paid"]) if t["amount_paid"] else "-" }}</td>
+            <td>{{ t["status"] }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7">No records yet.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p><a href="{{ url_for('index') }}">&larr; Back to live display</a></p>
+{% endblock %}

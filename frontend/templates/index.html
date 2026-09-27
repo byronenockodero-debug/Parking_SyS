@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Live Display - Smart Parking{% endblock %}
+
+{% block content %}
+<!--
+This page IS the "visual display" the assignment asks for: drivers can
+see, at a glance, which slots are free before they even drive in.
+
+The server still renders the correct state on first load (so the page
+works even if JavaScript is disabled). frontend/static/js/script.js
+then polls /api/slots every few seconds and updates the numbers/grid
+in place - no full page reload, no flicker. All of that data still
+comes from the same Python `get_display_data()` function; JS only
+displays it.
+-->
+<div class="display-head">
+    <div>
+        <h2>Live Slot Availability</h2>
+        <p class="subtitle">Updated automatically - no need to refresh the page</p>
+    </div>
+    <div class="live-indicator" id="live-indicator">
+        <span class="live-dot"></span>
+        <span id="last-updated">Just now</span>
+    </div>
+</div>
+
+<section class="stats-row">
+    <div class="stat-card">
+        <span class="stat-value" id="free-count">{{ free_count }}</span>
+        <span class="stat-label">Free Slots</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-value" id="total-slots">{{ total_slots }}</span>
+        <span class="stat-label">Total Capacity</span>
+    </div>
+    <div class="stat-card stat-card--waiting" id="waiting-card">
+        <span class="stat-value" id="waiting-count">{{ waiting_count }}</span>
+        <span class="stat-label">Vehicles Waiting</span>
+    </div>
+</section>
+
+<div class="legend">
+    <span class="legend-item"><span class="legend-swatch free"></span> Free</span>
+    <span class="legend-item"><span class="legend-swatch occupied"></span> Occupied</span>
+</div>
+
+<section class="slot-grid" id="slot-grid">
+    {% for slot in slots %}
+        <div class="slot {{ 'occupied' if slot.occupied else 'free' }}" data-slot-id="{{ slot.slot_id }}" data-occupied="{{ 'true' if slot.occupied else 'false' }}">
+            <span class="slot-icon">{{ '🚗' if slot.occupied else '✓' }}</span>
+            <span class="slot-number">Slot {{ slot.slot_id }}</span>
+            <span class="slot-label">
+                {% if slot.occupied %}{{ slot.plate }}{% else %}Available{% endif %}
+            </span>
+        </div>
+    {% endfor %}
+</section>
+{% endblock %}

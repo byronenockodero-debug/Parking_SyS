@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Vehicle Exit{% endblock %}
+
+{% block content %}
+<div class="page-head">
+    <h2>Vehicle Exit &amp; Payment</h2>
+    <div class="live-clock" id="live-clock"></div>
+</div>
+
+<form method="POST" class="parking-form">
+    <label for="plate">Number Plate</label>
+    <input type="text" id="plate" name="plate" placeholder="e.g. KDA 123A" required>
+    <button type="submit">Calculate Fee &amp; Exit</button>
+</form>
+
+{% if result %}
+    <div class="result {{ 'success' if result.success else 'error' }}">
+        <p>{{ result.message }}</p>
+
+        {% if result.success %}
+        <!--
+        Real, exact elapsed time (e.g. "3 minutes"), computed by
+        logic/billing.py::format_duration() from the actual entry and
+        exit timestamps - not rounded to a billing bracket, so a 3
+        minute stay in real life shows as "3 minutes" here, even
+        though it's billed as a full first hour.
+        -->
+        <dl class="receipt">
+            <dt>Entered</dt>
+            <dd>{{ result.entry_time_display }}</dd>
+            <dt>Exited</dt>
+            <dd>{{ result.exit_time_display }}</dd>
+            <dt>Time spent</dt>
+            <dd>{{ result.duration_text }}</dd>
+            <dt>Amount paid</dt>
+            <dd>KES {{ "%.2f"|format(result.amount_paid) }}</dd>
+        </dl>
+        {% endif %}
+
+        {% if result.next_served %}
+            <p class="note">Slot handed to next waiting vehicle: {{ result.next_served }}</p>
+        {% endif %}
+    </div>
+{% endif %}
+
+<p><a href="{{ url_for('index') }}">&larr; Back to live display</a></p>
+{% endblock %}

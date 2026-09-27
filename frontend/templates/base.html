@@ -1,0 +1,48 @@
+<!--
+frontend/templates/base.html
+------------------------------
+Shared page skeleton (header/nav/footer) that every other page extends,
+so we don't repeat the same HTML on every page.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Smart Parking System{% endblock %}</title>
+
+    <!-- Nicer typeface. If there's no internet connection, the CSS
+         fallback stack (system-ui, Arial...) is used instead, so the
+         app never breaks - it just looks slightly plainer offline. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="brand">
+                <span class="brand-icon">&#128663;</span>
+                <span class="brand-text">Smart Parking</span>
+            </div>
+            <nav>
+                <a href="{{ url_for('index') }}" class="{{ 'active' if request.path == url_for('index') else '' }}">Live Display</a>
+                <a href="{{ url_for('entry') }}" class="{{ 'active' if request.path == url_for('entry') else '' }}">Vehicle Entry</a>
+                <a href="{{ url_for('exit_route') }}" class="{{ 'active' if request.path == url_for('exit_route') else '' }}">Vehicle Exit</a>
+                <a href="{{ url_for('history') }}" class="{{ 'active' if request.path == url_for('history') else '' }}">History</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>DSA Task One &mdash; Multimedia University of Kenya</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
