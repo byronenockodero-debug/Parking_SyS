@@ -88,18 +88,3 @@ On startup, `ParkingLot._restore_state_from_database()` reloads every
 `ACTIVE` ticket, so a server restart never loses track of who is
 currently parked - the database is the durable source of truth, and
 the in-memory structures above are just a fast working copy of it.
-
-## Deploying it so others can see a live link (optional)
-
-The assignment only asks for a GitHub submission, so this step is
-optional - but if you want a clickable live demo like some GitHub repos
-have:
-
-- Push the code to GitHub as-is (the `.gitignore` already excludes
-  `venv/` and `parking.db`).
-- Connect the repo to a free host that keeps a Python process running,
-  e.g. **Render.com** or **PythonAnywhere** (both have beginner-friendly
-  free tiers for Flask apps).
-- Set the start command to `python run.py` (with `debug=False`), and
-  the host gives you a public URL - no venv or local setup needed by
-  anyone who visits it.
